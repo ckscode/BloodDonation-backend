@@ -15,6 +15,10 @@ const userSchema = mongoose.Schema({
             return false;
         }
     },
+    ownerName:{
+         type:String,
+         required:true
+    },
     hospitalName:{
         type:String,
         required:function(){
