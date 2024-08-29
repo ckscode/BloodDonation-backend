@@ -1,6 +1,8 @@
 import User from "../Models/userModel.js";
 import jwt from "jsonwebtoken";
 import bcrypt from 'bcryptjs'
+import Inventory from "../Models/inventoryModel.js";
+import mongoose from "mongoose";
 
 export const Register = async (req, res) => {
   try {
@@ -32,6 +34,10 @@ export const Login = async (req, res) => {
       return res.send({ status: false, message: "User not found!" });
     }
 
+    if(userExists.userType !== req.body.type){
+      return res.send({status:false,message:`User not register as a ${req.body.type}`})
+    }
+
     const { password } = req.body;
     const compare = await bcrypt.compare(password, userExists.password);
 
@@ -58,9 +64,58 @@ export const Login = async (req, res) => {
 export const getCurrentUser = async(req,res) =>{
   try{
       const user = await User.findOne({_id:req.body.userId});
-
       return res.send({status:true,message:'User fetched successfully',data:user});
   }catch(error){
     return res.send({status:false,message:error.message})
   }
+}
+
+
+export const getAllDonorOfOrg = async(req,res) =>{
+  try{
+  const organisation = new mongoose.Types.ObjectId(req.body.userId)
+  const uniqueDonors = await Inventory.distinct('donor',{organisation})
+  
+   const donorIn = await User.find({
+    _id:{$in:uniqueDonors}
+   }
+   )    
+
+    return res.send({status:true,message:'Donors fetched successfully',data:donorIn});
+}catch(error){
+  return res.send({status:false,message:error.message})
+}
+}
+
+export const getAllHospitalsOfOrg = async(req,res) =>{
+  try{
+    const organisation = new mongoose.Types.ObjectId(req.body.userId)
+    const uniqueHospitals = await Inventory.distinct('hospital',{organisation})
+    
+     const hospitals = await User.find({
+      _id:{$in:uniqueHospitals}
+     }
+     )    
+
+      return res.send({status:true,message:'Hospitals fetched successfully',data:hospitals});
+}catch(error){
+  return res.send({status:false,message:error.message})
+}
+}
+
+
+export const getAllOrganisationOfOrg = async(req,res) =>{
+  try{
+    const donor = new mongoose.Types.ObjectId(req.body.userId)
+    const uniqueOrg = await Inventory.distinct('organisation',{donor})
+    
+     const organisations = await User.find({
+      _id:{$in:uniqueOrg}
+     }
+     )    
+   console.log(hospitals)
+      return res.send({status:true,message:'Organisations fetched successfully',data:organisations});
+}catch(error){
+  return res.send({status:false,message:error.message})
+}
 }

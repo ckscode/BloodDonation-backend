@@ -16,8 +16,13 @@ const userSchema = mongoose.Schema({
         }
     },
     ownerName:{
-         type:String,
-         required:true
+        type:String,
+        required:function(){
+            if(this.userType === 'admin' || this.userType === 'donor'){
+                return false;
+            }
+            return true;
+        }
     },
     hospitalName:{
         type:String,
