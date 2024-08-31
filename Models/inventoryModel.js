@@ -18,7 +18,7 @@ const InventorySchema = new mongoose.Schema(
         },
         organisation:{
             type:mongoose.Schema.Types.ObjectId,
-            ref:'organisations',
+            ref:'users',
             required:true
         },
         email:{

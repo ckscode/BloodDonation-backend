@@ -44,7 +44,6 @@ export const Login = async (req, res) => {
     if (!compare) {
       return res.send({ status: false, message: "Invalid password" });
     }
-    console.log(userExists._id);
     //generate token
     const token = jwt.sign({ userId: userExists._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
@@ -80,7 +79,7 @@ export const getAllDonorOfOrg = async(req,res) =>{
     _id:{$in:uniqueDonors}
    }
    )    
-
+ 
     return res.send({status:true,message:'Donors fetched successfully',data:donorIn});
 }catch(error){
   return res.send({status:false,message:error.message})
@@ -113,9 +112,28 @@ export const getAllOrganisationOfOrg = async(req,res) =>{
       _id:{$in:uniqueOrg}
      }
      )    
-   console.log(hospitals)
+     
       return res.send({status:true,message:'Organisations fetched successfully',data:organisations});
 }catch(error){
   return res.send({status:false,message:error.message})
 }
 }
+
+
+export const getAllOrganisationForHos = async(req,res) =>{
+  try{
+    const hospital = new mongoose.Types.ObjectId(req.body.userId)
+    const uniqueOrg = await Inventory.distinct('organisation',{hospital})
+    
+     const organisations = await User.find({
+      _id:{$in:uniqueOrg}
+     }
+     )    
+
+      return res.send({status:true,message:'Organisations fetched successfully',data:organisations});
+}catch(error){
+  return res.send({status:false,message:error.message})
+}
+}
+
+
