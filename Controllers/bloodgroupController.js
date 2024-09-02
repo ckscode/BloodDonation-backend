@@ -49,7 +49,7 @@ await Promise.all(
         ])
 
         
-        const available = (totalIn[0]?.total || 0) - (totalOut[0]?.total)
+        const available = (totalIn[0]?.total || 0) - (totalOut[0]?.total || 0)
 
         bloodgroupsData.push({
             bloodgroup,

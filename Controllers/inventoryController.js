@@ -102,7 +102,7 @@ export const getInventory = async (req, res) => {
 
 export const getInventoryWithFilters = async (req, res) => {
   try {
-    const inventory = await Inventory.find(req.body.filters)
+    const inventory = await Inventory.find(req.body.filters).limit(req.body.limit)
       .populate("donor")
       .populate("hospital")
       .populate("organisation");
