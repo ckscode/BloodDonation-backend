@@ -12,7 +12,7 @@ dotenv.config();
 
 connectDB()
 app.use(cors({
-    origin:["http://localhost:5173"],
+    origin:["http://localhost:5173","https://cks-blood-donation.vercel.app"],
     credentials:true,
 }
 ));
