@@ -24,4 +24,4 @@ app.use('/api',inventoryRouter)
 app.use('/api',dashboardRouter)
 
 app.listen(process.env.PORT,()=>
-    console.log(`app is listening to ${process.env.PORT}`))
+    console.log(`app is listening`))
